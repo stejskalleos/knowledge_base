@@ -10,6 +10,8 @@ echo ''
 echo 'Updating /etc/hosts'
 echo "$(hostname -I | awk '{print $1}') $(hostname -f)" > /etc/hosts
 
+dnf install foreman-installer-katello -y
+
 foreman-installer --scenario katello \
     --foreman-initial-admin-username 'admin' \
     --foreman-initial-admin-password 'admin'
