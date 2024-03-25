@@ -95,9 +95,3 @@ Date: Tue, 12 Mar 2024 13:16:27 GMT
 Server: Apache/2.4.58 (Fedora Linux) OpenSSL/3.1.1
 Location: https://foreman.local.lan/
 ```
-
-Go to https://foreman.local.lan and add Smart Proxy
-
-```
-
-```

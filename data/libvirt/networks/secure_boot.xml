@@ -6,23 +6,23 @@
       <port start='1024' end='65535'/>
     </nat>
   </forward>
-  <bridge name='virbr1' zone='trusted' stp='on' delay='0'/>
+  <bridge name='virbr6' zone='trusted' stp='on' delay='0'/>
   <mac address='00:AA:BB:CC:85:B8'/>
   <dns>
-    <host ip='192.168.122.1'>
-      <hostname>foreman.local.lan</hostname>
+    <host ip='192.168.66.1'>
+      <hostname>boot.local.lan</hostname>
     </host>
   </dns>
-  <ip address='192.168.122.1' netmask='255.255.255.0'>
+  <ip address='192.168.66.1' netmask='255.255.255.0'>
     <tftp root='/var/lib/tftpboot' />
     <dhcp>
-      <range start='192.168.122.2' end='192.168.122.254'/>
+      <range start='192.168.66.2' end='192.168.66.254'/>
       <!-- Pointing to not existing file will make the ipv4 PXE fail faster -->
       <bootp file='nope-not-existing'/>
     </dhcp>
   </ip>
   <!-- Not existing IPv6 network will make the IPv6 fail faster -->
-  <ip family='ipv6' address='2001:db8:dead:beef:fe::2' prefix='96'>
+  <ip family='ipv6' address='0122:db8:dead:beef:fe::2' prefix='96'>
     <dhcp>
       <range start='0122:db8:dead:beef:fe::1000' end='0122:db8:dead:beef:fe::2000'/>
     </dhcp>
@@ -30,6 +30,6 @@
   <dnsmasq:options>
     <dnsmasq:option value='dhcp-vendorclass=set:efi-http,HTTPClient:Arch:00016'/>
     <dnsmasq:option value='dhcp-option-force=tag:efi-http,60,HTTPClient'/>
-    <dnsmasq:option value='dhcp-boot=tag:efi-http,http://192.168.121.66/shimx64.efi'/>
+    <dnsmasq:option value='dhcp-boot=tag:efi-http,http://192.168.66.1/shimx64.efi'/>
   </dnsmasq:options>
 </network>
