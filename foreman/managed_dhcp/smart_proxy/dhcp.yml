@@ -1,0 +1,4 @@
+---
+:enabled: http
+:use_provider: dhcp_isc
+:server: 127.0.0.1

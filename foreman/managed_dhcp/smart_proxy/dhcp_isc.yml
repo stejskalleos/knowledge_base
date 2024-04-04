@@ -1,0 +1,3 @@
+---
+:config: /etc/dhcp/dhcpd.conf
+:leases: /var/lib/dhcpd/dhcpd.leases

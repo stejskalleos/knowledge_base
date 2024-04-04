@@ -100,18 +100,16 @@ firewall-cmd --permanent --add-service=https
 firewall-cmd --zone=FedoraWorkstation --add-port=80/tcp --permanent
 firewall-cmd --zone=FedoraWorkstation --add-port=443/tcp --permanent
 
-# Allow ICMP for Ping
-firewall-cmd --zone=FedoraWorkstation --add-icmp-block-inversion --permanent
+# Starting from RHEL 9, both forward and masquerade options must be enabled on firewalld when forwarding packets from one interface to another.
+firewall-cmd --permanent --zone=FedoraWorkstation --add-masquerade
+firewall-cmd --permanent --zone=FedoraWorkstation --add-forward
 
 # Exception rule for Libvirt machines
 firewall-cmd --zone=FedoraWorkstation --add-source=192.168.121.1/24 --permanent
 firewall-cmd --zone=FedoraWorkstation --add-rich-rule='rule family="ipv4" source address="192.168.121.1/24" accept' --permanent
 
-# TODO
-firewall-cmd --zone=FedoraWorkstation --add-masquerade --permanent
-
 firewall-cmd --reload
-systemctl start firewalld
+systemctl restart firewalld
 ```
 
 ## Apache

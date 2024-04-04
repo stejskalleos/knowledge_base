@@ -1,0 +1,17 @@
+<network>
+  <name>default</name>
+  <uuid>2764fd7d-c437-4219-b76d-484dfb0e933e</uuid>
+  <forward dev='virbr0' mode='nat'>
+    <interface dev='virbr0'/>
+  </forward>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='52:54:00:a4:d3:1b'/>
+  <domain name='virtual.lan' localOnly='yes'/>
+  <dns>
+    <host ip='192.168.66.1'>
+      <hostname>gateway</hostname>
+    </host>
+  </dns>
+  <ip address='192.168.66.1' netmask='255.255.255.0'>
+  </ip>
+</network>
