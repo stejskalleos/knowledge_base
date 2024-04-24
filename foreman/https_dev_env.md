@@ -5,7 +5,7 @@
 `mkcert` is a simple tool for making locally-trusted development certificates. It requires no configuration.
 https://github.com/FiloSottile/mkcert
 
-**Installation**
+### Installation
 Download the latest `mkcert-vX.Y.Z-linux-amd64` from the [GitHub](https://github.com/FiloSottile/mkcert/releases).
 
 ```
@@ -15,7 +15,7 @@ chmod +x /usr/bin/mkcert
 
 Reload the terminal.
 
-**rootCA**
+### Certificates
 Generate and install the local CA in the system trust store.
 
 ```
@@ -70,12 +70,20 @@ webpack_dev_server_https: false
 
 ## Apache
 
+```
+dnf install httpd mod_ssl
+```
+
 Remove any `/etc/httpd/conf.d/*.conf` files that are not necessary.
 
-See [httpd.conf](/datas/httpd/httpd.conf)
+See [httpd.conf](/data/httpd/httpd.conf)
 See [foreman.conf](/data/httpd/foreman.conf)
 
-## DNS
+```
+systemctl restart httpd
+```
+
+## Poor man's DNS
 
 `/etc/hosts`
 
@@ -83,6 +91,13 @@ See [foreman.conf](/data/httpd/foreman.conf)
 127.0.0.1   localhost localhost.localdomain foreman.local.lan
 ::1         localhost localhost.localdomain foreman.local.lan
 
+```
+
+## Firewall
+
+```
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
 ```
 
 ## Test it
