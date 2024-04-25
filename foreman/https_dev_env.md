@@ -16,19 +16,14 @@ chmod +x /usr/bin/mkcert
 Reload the terminal.
 
 ### Certificates
-Generate and install the local CA in the system trust store.
+Generate
 
 ```
-mkcert -install
+cd /etc/httpd/conf.d
+ mkcert -install "*.local.lan"
 
 # To see where the CA is:
 echo $(mkcert -CAROOT)
-```
-
-Generate certificate and key
-
-```
-mkcert "*.local.lan"
 ```
 
 ## Foreman configuration
