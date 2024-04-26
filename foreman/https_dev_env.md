@@ -1,9 +1,7 @@
 # HTTPS & DEV ENV
 
 ## mkcert
-
-`mkcert` is a simple tool for making locally-trusted development certificates. It requires no configuration.
-https://github.com/FiloSottile/mkcert
+[mkcert](https://github.com/FiloSottile/mkcert) is a simple tool for creating locally trusted development certificates. It requires no configuration.
 
 ### Installation
 Download the latest `mkcert-vX.Y.Z-linux-amd64` from the [GitHub](https://github.com/FiloSottile/mkcert/releases).
@@ -16,11 +14,10 @@ chmod +x /usr/bin/mkcert
 Reload the terminal.
 
 ### Certificates
-Generate
 
 ```
 cd /etc/httpd/conf.d
- mkcert -install "*.local.lan"
+mkcert -install "*.local.lan"
 
 # To see where the CA is:
 echo $(mkcert -CAROOT)
@@ -39,12 +36,6 @@ webpack_dev_server_https: false
   - foreman.local.lan
   - localhost
 ```
-
-## TODO
-
-- SSL settings for Proxy authentication
-- Proxy SSL config
-- Test it with VM
 
 ## Smart Proxy
 
@@ -75,7 +66,19 @@ See [httpd.conf](/data/httpd/httpd.conf)
 See [foreman.conf](/data/httpd/foreman.conf)
 
 ```
-systemctl restart httpd
+# Check the config
+apachectl configtest
+
+# Start services
+systemctl start httpd.service
+systemctl enable httpd.service
+```
+
+## Firewall
+
+```
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
 ```
 
 ## Poor man's DNS
@@ -86,13 +89,6 @@ systemctl restart httpd
 127.0.0.1   localhost localhost.localdomain foreman.local.lan
 ::1         localhost localhost.localdomain foreman.local.lan
 
-```
-
-## Firewall
-
-```
-firewall-cmd --permanent --add-service=http
-firewall-cmd --permanent --add-service=https
 ```
 
 ## Test it
