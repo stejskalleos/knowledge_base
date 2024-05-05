@@ -1,0 +1,11 @@
+<network>
+  <name>fo_pxe_bios_tftp</name>
+  <uuid>63162c68-7af6-46cb-9841-759eb44ed48a</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr90' zone='trusted' stp='on' delay='0'/>
+  <mac address='00:aa:bb:90:90:90'/>
+  <domain name='virtual.lan'/>
+  <dns enable='no'/>
+  <ip address='192.168.190.1' netmask='255.255.255.0'>
+  </ip>
+</network>

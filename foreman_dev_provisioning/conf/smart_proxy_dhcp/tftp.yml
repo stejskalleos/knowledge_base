@@ -1,0 +1,4 @@
+---
+:enabled: true
+:tftproot: /var/lib/tftpboot/
+:tftp_servername: 192.168.190.1
