@@ -2,8 +2,9 @@
 
 ## Wireshark
 
-```
-wireshark -ki virbr90
+```bash
+sudo dnf install wireshark
+sudo wireshark -ki virbr90
 ```
 
 ## TFTP
@@ -12,7 +13,7 @@ wireshark -ki virbr90
 
 ```
 [Service]
-ExecStart=/usr/sbin/in.tftpd -v -c -p -s /var/lib/tftpboot
+ExecStart=/usr/sbin/in.tftpd -v ...
 ```
 
 Apply the changes
@@ -25,7 +26,7 @@ systemctl restart tftp-server
 Logs
 
 ```
-journalctl -fxeu tftp-server
+journalctl -fxeu tftp
 ```
 
 ## DHCP
@@ -45,6 +46,12 @@ Logs
 
 ```
 journalctl -fxeu dhcpd
+```
+
+Config validator
+
+```bash
+dhcpd -t -cf /etc/dhcp/dhcpd.conf
 ```
 
 ## Foreman

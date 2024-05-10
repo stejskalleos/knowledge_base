@@ -1,5 +1,5 @@
 Status:
-- TFTP & DHCPD funguje
-- Nefunguje DNS
-  - local="no" nepomohlo
-  - musim nejak obejit DNSMASQ (mozna nakonfigurovat DHCPD!!!!!!)
+
+TODO:
+- Cislovani
+- Komentare ve vsech conf files

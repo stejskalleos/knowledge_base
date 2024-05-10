@@ -16,6 +16,8 @@ cp /usr/share/syslinux/{pxelinux.0,menu.c32,chain.c32,ldlinux.c32,libcom32.c32,l
 chown your-account:your-group -R /var/lib/tftpboot
 ```
 
+UEFI
+
 ## Libvirt Network
 
 ```bash

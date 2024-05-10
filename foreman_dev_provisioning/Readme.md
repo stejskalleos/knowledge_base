@@ -4,7 +4,7 @@ Follow the tutorial in this order:
 
 1. Prerequisities
 1. DHCP
-1. [PXE+BIOS+TFTP](manuals/pxe_bios_tftp.md)
+1. [PXE+BIOS+TFTP](manuals/pxe_bios.md)
 1. PXE+UEFI+HTTP
 
 - HTTPboot
@@ -18,8 +18,12 @@ Bare-metal workflow is simulated with Libvirt.
 - Tested on Fedora 39
 - Ruby 3.0
 
+Enable all templates on the OS
+
 ```
-dnf install -y syslinux @virtualization grub2-efi-x64 shim-x64 tftp-server tftp syslinux-tftpboot dhcp-server
+dnf config-manager --add-repo http://www.kraxel.org/repos/firmware.repo
+
+dnf install syslinux @virtualization grub2-efi-x64 shim-x64 tftp-server tftp syslinux-tftpboot dhcp-server ipxe-bootimgs dnf-plugins-core edk2.git-ovmf-x64
 ```
 
 Check that `libvirtd` is running
