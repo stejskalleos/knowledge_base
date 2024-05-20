@@ -9,18 +9,18 @@ sudo wireshark -ki virbr90
 
 ## TFTP
 
-`vim /usr/lib/systemd/system/tftp-server.service`
+`vim /usr/lib/systemd/system/tftp.service`
 
 ```
 [Service]
-ExecStart=/usr/sbin/in.tftpd -v ...
+ExecStart=/usr/sbin/in.tftpd -s /var/lib/tftpboot -vvvv
 ```
 
 Apply the changes
 
 ```
 systemctl daemon-reload
-systemctl restart tftp-server
+systemctl restart tftp tftp
 ```
 
 Logs

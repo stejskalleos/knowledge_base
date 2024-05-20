@@ -25,6 +25,8 @@ virsh net-create --file networks/fo_pxe_bios_tftp.xml
 virsh net-define --file networks/fo_pxe_bios_tftp.xml
 virsh net-autostart fo_pxe_bios_tftp
 virsh net-info fo_pxe_bios_tftp
+
+NET="fo_pxe_bios_tftp";virsh net-edit $NET;virsh net-destroy $NET;virsh net-start $NET
 ```
 
 Note: To apply any changes to the network you must run:

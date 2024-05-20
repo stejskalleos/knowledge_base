@@ -1,0 +1,46 @@
+<network>
+  <name>foreman_default</name>
+  <!-- Universally unique identifier for the network -->
+  <uuid>d8fbf022-dc8e-47c6-a632-cd5f94ac4a5b</uuid>
+  <!-- Network forwarding mode: NAT (Network Address Translation) -->
+  <forward mode='nat'/>
+  <!-- Bridge configuration -->
+  <!-- Spanning Tree Protocol (STP) enabled to prevent loops -->
+  <!-- Delay for STP, set to 0 for no delay -->
+  <bridge name='virbr90' stp='on' delay='0'/>
+  <!-- MAC address of the bridge interface -->
+  <mac address='c8:3a:f7:78:48:7e'/>
+  <!-- Domain name configuration -->
+  <!-- localOnly='no' allows DNS queries to be forwarded to external DNS servers -->
+  <domain name='virtual.lan' localOnly='no'/>
+
+  <!-- DNS configuration -->
+  <dns>
+    <!-- Static DNS entry for a specific host -->
+    <!-- IP address of the host -->
+    <host ip='192.168.190.1'>
+      <!-- Hostname corresponding to the IP address -->
+      <hostname>foreman.local.lan</hostname>
+    </host>
+  </dns>
+
+  <!-- IP address configuration for the network -->
+  <!-- Gateway IP address for the network -->
+  <!-- Network mask defining the network's subnet -->
+  <ip address='192.168.190.1' netmask='255.255.255.0'>
+
+    <!-- TFTP server configuration -->
+    <!-- Root directory for TFTP server -->
+    <tftp root='/var/lib/tftpboot'/>
+
+    <!-- DHCP server configuration -->
+    <dhcp>
+      <!-- IP range for DHCP assignments -->
+      <!-- Start of the DHCP range -->
+      <range start='192.168.190.2' end='192.168.190.254'/>
+
+      <!-- Boot file for PXE booting -->
+      <bootp file='pxelinux.0'/>
+    </dhcp>
+  </ip>
+</network>

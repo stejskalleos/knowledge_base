@@ -1,3 +1,4 @@
 ---
 :enabled: true
+# Note: Use the IP instead of FQDN to avoid DNS resolution issues
 :template_url: http://192.168.190.1:8080
