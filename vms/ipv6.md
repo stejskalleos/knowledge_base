@@ -31,7 +31,7 @@ ens7: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group d
 `Vagrantfile
 ```ruby
 config.vm.network "private_network",
-  ip: "192.168.123.#{rand(3..254)}",
+  ip: "192.168.66.#{rand(3..254)}",
   libvirt__guest_ipv6: "yes"
 
 ```
