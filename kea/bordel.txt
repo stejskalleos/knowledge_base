@@ -1,0 +1,32 @@
+Repo & pkg
+
+KEA 2.6.1 je stable
+https://kea.readthedocs.io/en/kea-2.6.1/arm/agent.html
+
+=========== From ISC ===========
+https://cloudsmith.io/~isc/repos/kea-2-6/setup/#repository-setup-dnf
+
+==================================
+Fedora repos
+
+https://packages.fedoraproject.org/pkgs/kea/kea/fedora-40-updates.html#provides
+
+
+First configuration
+
+
+API samples
+in /usr/share/kea
+
+https://github.com/isc-projects/kea/tree/master/doc/examples/kea4
+
+
+Starting services
+DHCP4
+/usr/sbin/kea-dhcp4 -c /etc/kea/kea-dhcp4.conf
+/usr/sbin/kea-dhcp4 -t /etc/kea/kea-dhcp4.conf Validace configu
+Control Agent (API)
+The Kea Control Agent (CA) is a daemon which exposes a RESTful control interface for managing Kea servers.
+
+
+
