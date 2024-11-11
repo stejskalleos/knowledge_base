@@ -37,7 +37,6 @@ defaults
 	timeout check       	10s
 	maxconn             	3000
 
-#https
 frontend https
    bind *:443
    mode tcp
@@ -49,7 +48,6 @@ backend f-proxy-https
    balance source
    server f-proxy-https-1 10.0.167.57:443 check
 
-#http foreman
 frontend http
    bind *:80
    mode tcp
@@ -61,7 +59,6 @@ backend f-proxy-http
    balance roundrobin
    server f-proxy-http-1 10.0.167.57:80 check
 
-# capsule_https
 frontend https_capsule
    bind *:9090
    mode tcp
@@ -73,7 +70,6 @@ backend f-proxy-https-capsule
    balance source
    server f-proxy-https-capsule-1 6.6.6.23:9090 check
 
-#amqp
 frontend amqp
    bind *:5647
    mode tcp
@@ -85,7 +81,6 @@ backend f-proxy-amqp
    balance roundrobin
    server f-proxy-amqp-1 6.6.6.23:5647 check
 
-#anaconda
 frontend anaconda
    bind *:8000
    mode tcp
@@ -97,7 +92,6 @@ backend f-proxy-anaconda
    balance roundrobin
    server f-proxy-anaconda-1 6.6.6.23:8000 check
 
-#puppet
 frontend puppet
    bind *:8140
    mode tcp
@@ -109,7 +103,6 @@ backend f-proxy-puppet
    balance roundrobin
    server f-proxy-puppet-1 6.6.6.23:8140 check
 
-#puppet-ca
 frontend puppet-ca
    bind *:8141
    mode tcp
@@ -121,7 +114,6 @@ backend f-proxy-puppet-ca
    balance roundrobin
    server f-proxy-puppet-ca-1 6.6.6.23:8140 check
 
-#rhsm
 frontend rhsm
    bind *:8443
    mode tcp
@@ -133,7 +125,6 @@ backend f-proxy-rhsm
    balance roundrobin
    server f-proxy-rhsm-1 6.6.6.23:8443 check
 
-#scap
 frontend scap
    bind *:9090
    mode tcp
