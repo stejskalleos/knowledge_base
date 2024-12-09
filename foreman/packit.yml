@@ -1,0 +1,15 @@
+# Testing Pull Requests with Packit
+
+```
+foreman-maintain service stop
+```
+
+From the Packit job:
+```
+dnf copr enable packit/theforeman-foreman-XXXX rhel-9-x86_64
+```
+
+Disable foreman-protector
+```
+dnf install -y  --disableplugin=foreman-protector
+```
