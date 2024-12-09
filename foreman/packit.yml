@@ -13,3 +13,8 @@ Disable foreman-protector
 ```
 dnf install -y  --disableplugin=foreman-protector
 ```
+
+Run Foreman
+```
+foreman-maintain service start
+```
