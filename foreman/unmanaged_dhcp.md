@@ -1,11 +1,89 @@
-# Unmanaged DHCP
+# Foreman & Unmanaged DHCP with Foreman Bootdisk
+Simple tutorial on how to set up Foreman (Satellite) with unmanaged DHCP.
 
-**Foreman**
-```shell
-foreman-installer --foreman-proxy-dhcp false --foreman-proxy-dhcp-managed false
+## Installation
+```
+foreman-installer --foreman-unattended-url "http://192.168.190.16" \
+  --foreman-proxy-dhcp false \
+  --foreman-proxy-dhcp-managed false \
+  --foreman-proxy-templates true \
+  --foreman-proxy-registration-url "http://192.168.190.16:8000" \
+  --foreman-proxy-template-url "http://192.168.190.16:8000" \
+  --foreman-proxy-http true
+```
+_Note: If your DNS works fine (unlike mine), use FQDN instead of IP._
+
+## Foreman Configuration
+**Create a domain**
+```
+hammer domain create --name "virtual.lan"
 ```
 
-**Satellite**
-```shell
-satellite-installer --foreman-proxy-dhcp false --foreman-proxy-dhcp-managed false
+**Create a subnet**
+```
+hammer subnet create --name "no_dhcp_subnet" \
+  --network "192.168.190.0" \
+  --prefix "24" \
+  --mask "255.255.255.0" \
+  --gateway "192.168.190.1" \
+  --dns-primary "192.168.190.1" \
+  --ipam "None" \
+  --mtu "1500" \
+  --boot-mode "DHCP" \
+  --location-title "Default Location" \
+  --organization-title "Default Organization"
+```
+Go into UI to the subnet detail and assign domains and smart proxies to it.
+
+**Foreman Settings**
+```
+hammer setting set --name "update_ip_from_built_request" --value 1
+hammer setting set --name "token_duration" --value 360
+```
+Notes:
+* `update_ip_from_built_request` is required. Otherwise, you'll host ends up with an empty IP, which can cause problems in the future.
+* `token_duration` must not be 0. Foreman uses the IP address to find the host if you disable build tokens. However, if the host doesn't have an IP, this will not work.
+
+
+(Optional) Create a host group so it's easier to create hosts.
+
+## Configure DHCP
+### With Libvirt
+XML definition
+```xml
+<network>
+  <name>foreman_default</name>
+  <uuid>d8fbf022-dc8e-47c6-a632-cd5f94ac4a5b</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr90' stp='on' delay='0'/>
+  <mac address='c8:3a:f7:78:48:7e'/>
+  <domain name='virtual.lan' localOnly='no'/>
+  <ip address='192.168.190.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.190.2' end='192.168.190.254'/>
+    </dhcp>
+  </ip>
+</network>
+```
+
+See https://github.com/stejskalleos/knowledge_base/blob/main/tools/libvirt/new_network.md
+
+### With ISC DHCP
+TODO
+
+## Host creation
+Create a new host, you need to add a mac address, IP address is not required.
+Generate a **full host bootdisk iso**
+
+## Running VM with Libvirt
+```
+virt-install  --name=booty_mc_face \
+              --vcpus=4 \
+              --memory=4096 \
+              --disk size=20 \
+              --os-variant=centos-stream9 \
+              --network "network=foreman_default,mac=00:aa:aa:99:99:04" \
+              --connect qemu:///system \
+              --boot cdrom,hd \
+              --cdrom=./bootdisk.iso
 ```
