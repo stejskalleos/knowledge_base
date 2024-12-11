@@ -14,12 +14,25 @@ foreman-installer --foreman-unattended-url "http://192.168.190.16" \
 _Note: If your DNS works fine (unlike mine), use FQDN instead of IP._
 
 ## Foreman Configuration
-**Create a domain**
+**Create OS**
+```
+hammer os create --name "CentOS_Stream" \
+  --major 9 \
+  --family "Redhat" \
+  --password-hash "SHA512" \
+  --architectures "x86_64" \
+  --partition-tables "Kickstart default" \
+  --media "CentOS Stream 9 mirror" \
+  --location-title "Default Location" \
+  --organization-title "Default Organization"
+```
+
+**Create domain**
 ```
 hammer domain create --name "virtual.lan"
 ```
 
-**Create a subnet**
+**Create subnet**
 ```
 hammer subnet create --name "no_dhcp_subnet" \
   --network "192.168.190.0" \
