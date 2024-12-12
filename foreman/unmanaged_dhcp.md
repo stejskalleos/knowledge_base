@@ -105,8 +105,19 @@ See https://github.com/stejskalleos/knowledge_base/blob/main/tools/libvirt/new_n
 TODO
 
 ## Host creation
-Create a new host, you need to add a mac address, IP address is not required.
-Generate a **full host bootdisk iso**
+### With full-host bootdisk iso
+```
+hammer host create --name "full-bootdisk" \
+  --hostgroup-title "bare-metal/stream10" \
+  --interface "mac=00:aa:aa:10:10:01" \
+  --location-title "Default Location" \
+  --organization-title "Default Organization"
+```
+
+Download iso to local:
+```
+hammer --verify-ssl false bootdisk host --host "full-bootdisk.virtual.lan" --file ~/isos/full-host.iso --full true
+```
 
 ## Running VM with Libvirt
 ```
