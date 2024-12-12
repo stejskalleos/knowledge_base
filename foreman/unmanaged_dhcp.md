@@ -9,6 +9,7 @@ foreman-installer --foreman-unattended-url "http://192.168.190.16" \
   --foreman-proxy-templates true \
   --foreman-proxy-registration-url "http://192.168.190.16:8000" \
   --foreman-proxy-template-url "http://192.168.190.16:8000" \
+  --foreman-proxy-tftp false \
   --foreman-proxy-http true
 ```
 _Note: If your DNS works fine (unlike mine), use FQDN instead of IP._
@@ -17,7 +18,7 @@ _Note: If your DNS works fine (unlike mine), use FQDN instead of IP._
 **Create OS**
 ```
 hammer os create --name "CentOS_Stream" \
-  --major 9 \
+  --major 10 \
   --family "Redhat" \
   --password-hash "SHA512" \
   --architectures "x86_64" \
@@ -57,8 +58,27 @@ Notes:
 * `update_ip_from_built_request` is required. Otherwise, you'll host ends up with an empty IP, which can cause problems in the future.
 * `token_duration` must not be 0. Foreman uses the IP address to find the host if you disable build tokens. However, if the host doesn't have an IP, this will not work.
 
+**Global parameters**
+```
+hammer global-parameter set --name "host_registration_insights" --value false --parameter-type boolean
+```
 
-(Optional) Create a host group so it's easier to create hosts.
+**Host groups**
+```
+hammer hostgroup create --name "bare-metal" \
+  --location-title "Default Location" \
+  --organization-title "Default Organization" \
+  --domain "virtual.lan" \
+  --subnet "no_dhcp_subnet" \
+  --architecture  "x86_64" \
+  --root-password "dog8code"
+
+hammer hostgroup create --name "stream10" \
+  --parent-title "bare-metal" \
+  --operatingsystem "CentOS_Stream 10" \
+  --medium "CentOS Stream 9 mirror" \
+  --partition-table "Kickstart default"
+```
 
 ## Configure DHCP
 ### With Libvirt
