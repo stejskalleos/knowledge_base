@@ -61,6 +61,17 @@ Notes:
 **Global parameters**
 ```
 hammer global-parameter set --name "host_registration_insights" --value false --parameter-type boolean
+hammer global-parameter set --name "kt_activation_keys" --value "default" --parameter-type string
+hammer global-parameter set --name "subscription_manager_org" --value "Default Organization" --parameter-type string
+subscription_manager
+```
+
+**Content**
+```
+hammer activation-key create  --name "default" \
+   --organization-title "Default Organization" \
+   --lifecycle-environment "Library" \
+   --content-view "Default Organization View"
 ```
 
 **Host groups**
@@ -71,13 +82,13 @@ hammer hostgroup create --name "bare-metal" \
   --domain "virtual.lan" \
   --subnet "no_dhcp_subnet" \
   --architecture  "x86_64" \
-  --root-password "dog8code"
+  --root-password "dog8code" \
+  name=<string>\,value=<string>\,parameter_type=
 
 hammer hostgroup create --name "stream10" \
   --parent-title "bare-metal" \
   --operatingsystem "CentOS_Stream 10" \
   --medium "CentOS Stream 9 mirror" \
-  --partition-table "Kickstart default"
 ```
 
 ## Configure DHCP
@@ -121,13 +132,13 @@ hammer --verify-ssl false bootdisk host --host "full-bootdisk.virtual.lan" --fil
 
 ## Running VM with Libvirt
 ```
-virt-install  --name=booty_mc_face \
+virt-install  --name=full-boot-disk \
               --vcpus=4 \
               --memory=4096 \
               --disk size=20 \
               --os-variant=centos-stream9 \
-              --network "network=foreman_default,mac=00:aa:aa:99:99:04" \
+              --network "network=foreman_default,mac=00:aa:aa:10:10:01" \
               --connect qemu:///system \
               --boot cdrom,hd \
-              --cdrom=./bootdisk.iso
+              --cdrom=full-host.iso
 ```
