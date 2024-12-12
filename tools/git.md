@@ -3,5 +3,5 @@
 Cleanup review branches
 
 ```
-git branch -D $(git branch | grep 'review-*')
+git branch --list 'review*'  | xargs -r git branch -d -f
 ```
