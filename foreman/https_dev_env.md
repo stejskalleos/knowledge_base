@@ -101,3 +101,25 @@ Date: Tue, 12 Mar 2024 13:16:27 GMT
 Server: Apache/2.4.58 (Fedora Linux) OpenSSL/3.1.1
 Location: https://foreman.local.lan/
 ```
+
+## Adding CA to VM
+and enable HTTPS communication from hosts to VM
+
+Get the CA
+```
+cd $(mkcert -CAROOT)
+cat rootCA.pem
+
+Add it to VM
+```
+ssh root@your-vm
+vim /etc/pki/ca-trust/source/anchors/foreman-ca.pem
+# Copy the content of the CA
+
+update-ca-trust extract
+```
+Test the connection:
+```
+curl --user admin:changeme "https://foreman.local.lan/api/hosts"
+```
+
