@@ -109,6 +109,7 @@ Get the CA
 ```
 cd $(mkcert -CAROOT)
 cat rootCA.pem
+```
 
 Add it to VM
 ```
@@ -118,6 +119,7 @@ vim /etc/pki/ca-trust/source/anchors/foreman-ca.pem
 
 update-ca-trust extract
 ```
+
 Test the connection:
 ```
 curl --user admin:changeme "https://foreman.local.lan/api/hosts"
