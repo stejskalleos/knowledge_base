@@ -12,4 +12,4 @@ echo "$(hostname -I | awk '{print $1}') $(hostname -f)" > /etc/hosts
 
 foreman-installer --scenario katello \
     --foreman-initial-admin-username 'admin' \
-    --foreman-initial-admin-password 'admin'
+    --foreman-initial-admin-password 'changeme'
