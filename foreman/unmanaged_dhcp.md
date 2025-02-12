@@ -82,13 +82,19 @@ hammer hostgroup create --name "bare-metal" \
   --domain "virtual.lan" \
   --subnet "no_dhcp_subnet" \
   --architecture  "x86_64" \
-  --root-password "dog8code" \
-  name=<string>\,value=<string>\,parameter_type=
+  --root-password "dog8code"
 
 hammer hostgroup create --name "stream10" \
   --parent-title "bare-metal" \
   --operatingsystem "CentOS_Stream 10" \
   --medium "CentOS Stream 9 mirror" \
+  --partition-table "Kickstart default"
+
+hammer hostgroup create --name "stream9" \
+  --parent-title "bare-metal" \
+  --operatingsystem "CentOS_Stream 9" \
+  --medium "CentOS Stream 9 mirror" \
+  --partition-table "Kickstart default"
 ```
 
 ## Configure DHCP
@@ -118,7 +124,7 @@ TODO
 ## Host creation
 ### With full-host bootdisk iso
 ```
-hammer host create --name "full-bootdisk" \
+hammer host create --name "stream-10-full-bootdisk" \
   --hostgroup-title "bare-metal/stream10" \
   --interface "mac=00:aa:aa:10:10:01" \
   --location-title "Default Location" \
@@ -127,12 +133,12 @@ hammer host create --name "full-bootdisk" \
 
 Download iso to local:
 ```
-hammer --verify-ssl false bootdisk host --host "full-bootdisk.virtual.lan" --file ~/isos/full-host.iso --full true
+hammer bootdisk host --host "stream-10-full-bootdisk.virtual.lan" --file ~/isos/stream-10-full-bootdisk.iso --full true
 ```
 
 ## Running VM with Libvirt
 ```
-virt-install  --name=full-boot-disk \
+virt-install  --name=stream-10-full-boot-disk \
               --vcpus=4 \
               --memory=4096 \
               --disk size=20 \
@@ -140,5 +146,5 @@ virt-install  --name=full-boot-disk \
               --network "network=foreman_default,mac=00:aa:aa:10:10:01" \
               --connect qemu:///system \
               --boot cdrom,hd \
-              --cdrom=full-host.iso
+              --cdrom=~/isos/stream-10-full-bootdisk.iso
 ```
