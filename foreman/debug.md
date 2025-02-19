@@ -14,4 +14,5 @@ Logs
 /var/log/foreman-proxy/proxy.log
 
 foreman-rake log
+tail -f /var/log/foreman/production.log /var/log/foreman-proxy/proxy.log
 ```
