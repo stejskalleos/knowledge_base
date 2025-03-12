@@ -6,6 +6,7 @@ podman run -d --name postgres13 \
 -e POSTGRES_USER=postgres \
 -e POSTGRES_PASSWORD=changeme \
 -e POSTGRES_HOST_AUTH_METHOD=trust \
+-v postgres_data:/var/lib/postgresql/data \
 -p 5432:5432 \
 postgres:13
 
