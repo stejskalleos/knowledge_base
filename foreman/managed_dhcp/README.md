@@ -5,13 +5,33 @@ The IP range is `192.168.66.2 192.168.66.254` for local domain `virtual.lan`. Fe
 
 ## Libvirt Network XML example
 
+**isc.yml**
+```xml
+<network>
+  <name>isc</name>
+  <uuid>2764fd7d-c437-6666-b76d-484dfb0e933e</uuid>
+  <forward dev='virbr66' mode='nat'>
+    <interface dev='virbr66'/>
+  </forward>
+  <bridge name='virbr66' stp='on' delay='0'/>
+  <mac address='52:54:00:a4:d3:1b'/>
+  <domain name='virtual.lan' localOnly='yes'/>
+  <dns>
+    <host ip='192.168.66.1'>
+      <hostname>gateway</hostname>
+    </host>
+  </dns>
+  <ip address='192.168.66.1' netmask='255.255.255.0'>
+  </ip>
+</network>
 ```
-virsh net-create ./default.xml
-
-See default.xml
+Create a network for libvirt
 ```
-
-Don't forget to run `virsh net-autostart default`, otherwise after the restart of PC the `dhcp` will not start because of inactive `default` network.
+virsh net-create ./isc.xml
+virsh net-define ./isc.xml
+virsh net-start isc
+virsh net-autostart isc
+```
 
 ## DHCP
 
@@ -43,12 +63,12 @@ Find the line starting with `ExecStart= `and add the interface name at the end o
 ...
 
 [Service]
-ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf virbr0 -user dhcpd -group dhcpd --no-pid $DHCPDARGS
+ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf virbr66 -user dhcpd -group dhcpd --no-pid $DHCPDARGS
 
 ...
 ```
 
-The `virbr0` is the interface for your virtual machines. You don't want the DHCP server to listen everywhere, otherwise you gonna have a bad time.
+The `virbr66` is the interface for your virtual machines. You don't want the DHCP server to listen everywhere, otherwise you gonna have a bad time.
 
 Start the `dhcpd` service
 
