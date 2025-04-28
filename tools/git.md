@@ -26,3 +26,8 @@ git bisect bad
 # When the error is not there
 git bisect good
 ```
+
+End process
+```
+git bisect reset
+```
