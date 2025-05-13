@@ -88,7 +88,8 @@ systemctl status dhcpd.service
 Add yourself to the `dhcpd` group:
 
 ```
-usermod -a -G dhcpd you
+usermod -a -G dhcpd $USER
+chown $USER:dhcpd -R /etc/dhcp
 ```
 
 ### Troubleshooting
