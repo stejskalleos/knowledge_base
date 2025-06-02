@@ -16,3 +16,8 @@ Listing files
 rpm -ql grub2-efi-x64
 rpm -qpl package_file.rpm
 ```
+
+Find source rpm of the file
+```
+rpm -qf /boot/efi/EFI/fedora/mmx64.efi
+```
