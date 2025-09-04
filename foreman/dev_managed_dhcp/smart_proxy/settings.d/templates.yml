@@ -1,0 +1,3 @@
+---
+:enabled: true
+:template_url: "http://proxy.local.lan:8080"

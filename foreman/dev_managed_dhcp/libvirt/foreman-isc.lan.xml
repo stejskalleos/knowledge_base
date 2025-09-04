@@ -1,0 +1,17 @@
+<network>
+  <name>foreman-isc.lan</name>
+  <uuid>2764fd7d-c437-6666-b76d-484dfb0e933e</uuid>
+  <forward dev='virbr66' mode='nat'>
+    <interface dev='virbr66'/>
+  </forward>
+  <bridge name='virbr66' stp='on' delay='0'/>
+  <mac address='52:54:00:a4:d3:1b'/>
+  <domain name='foreman-isc.lan' localOnly='no'/>
+  <dns>
+    <host ip='192.168.66.1'>
+      <hostname>foreman.local.lan</hostname>
+    </host>
+  </dns>
+  <ip address='192.168.66.1' netmask='255.255.255.0'>
+  </ip>
+</network>

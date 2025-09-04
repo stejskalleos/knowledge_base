@@ -1,4 +1,5 @@
 ---
-:enabled: http
+:enabled: true
 :use_provider: dhcp_isc
 :server: 127.0.0.1
+:ping_free_ip: true

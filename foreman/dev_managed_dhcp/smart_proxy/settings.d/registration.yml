@@ -1,0 +1,3 @@
+---
+:enabled: true
+:registration_url: "http://foreman.local.lan:8080"
