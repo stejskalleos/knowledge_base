@@ -18,3 +18,11 @@ rbenv install 3.1.7
 
 rbenv local 3.1.7
 ```
+
+## Nuke and clean
+```
+rbenv clean
+dnf remove rbenv
+rm -rf ~/.rbenv
+rm -rf ~/.gem
+```
