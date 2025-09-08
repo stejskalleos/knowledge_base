@@ -76,20 +76,15 @@ See the `dhcp/dhcpd.conf` file.
 ### Service
 
 ```
-cp /usr/lib/systemd/system/dhcpd.service /etc/systemd/system/dhcpd.service
+systemctl edit dhcpd
 ```
 
-Find the line starting with `ExecStart= `and add the interface name at the end of this line. It should look like this:
-
-```
-# /etc/systemd/system/dhcpd.service
-
-...
-
+Add the following content:
+```ini
 [Service]
+ExecStart=
 ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf virbr66 -user dhcpd -group dhcpd --no-pid $DHCPDARGS
-
-...
+```
 ```
 
 The `virbr66` is the interface for your virtual machines. You don't want the DHCP server to listen everywhere, otherwise you gonna have a bad time.
@@ -97,8 +92,7 @@ The `virbr66` is the interface for your virtual machines. You don't want the DHC
 Start the `dhcpd` service
 
 ```
-sudo systemctl enable dhcpd.service
-sudo systemctl start dhcpd.service
+sudo systemctl enable --now dhcpd.service
 ```
 
 Check the status
