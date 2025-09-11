@@ -139,7 +139,7 @@ chown $USER:dhcpd -R /etc/dhcp
 ### Installation
 
 ```shell
-dnf install -y bind bind-utilsc
+dnf install -y bind bind-utils
 ```
 
 ### Configuration
