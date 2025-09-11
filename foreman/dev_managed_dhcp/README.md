@@ -3,8 +3,8 @@
 Local development setup for simulating bare-metal provisioning in environments where Foreman is not directly accessible from the machines, but only via Smart Proxy.
 
 ## Preconditions
-* Running foreman DEV setup
-* Running Smart Proxy DEV setup
+* Running Foreman
+* Running Smart Proxy
 * [Installed virtualization](https://docs.fedoraproject.org/en-US/quick-docs/virtualization-getting-started/)
 * Installed WireShark (for network trafic analysis)
 * (optional) [HTTPS & DEV ENV](https://github.com/stejskalleos/knowledge_base/blob/main/foreman/https_dev_env.md)
@@ -34,55 +34,55 @@ See the `libvirt/foreman-isc.lan.xml` for the network configuration.
 
 ### Create the network
 ```shell
-virsh net-create ./foreman-isc.lan.xml
-virsh net-define ./foreman-isc.lan.xml
-virsh net-autostart foreman-isc.lan
+sudo virsh net-create ./foreman-isc.lan.xml
+sudo virsh net-define ./foreman-isc.lan.xml
+sudo virsh net-autostart foreman-isc.lan
 
-virsh net-info foreman-isc.lan
+sudo virsh net-info foreman-isc.lan
 ```
 
 ### Firewall
 
 ```shell
-firewall-cmd --change-interface virbr66 --zone trusted
-firewall-cmd --change-interface virbr66 --zone trusted --permanent
-firewall-cmd --zone=libvirt --add-port=8080/tcp --permanent
-firewall-cmd --reload
+sudo firewall-cmd --change-interface virbr66 --zone trusted
+sudo firewall-cmd --change-interface virbr66 --zone trusted --permanent
+sudo firewall-cmd --zone=libvirt --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
 ```
 Note: On my Fedora I have bug where I have to change the `trusted` zone through UI manually, every time.
 
 ## TFTP
 ### Installation
 ```shell
-dnf install tftp-server
-systemctl enable --now tftp.socket
-systemctl status tftp.socket
+sudo dnf install tftp-server
+sudo systemctl enable --now tftp.socket
+sudo systemctl status tftp.socket
 ```
 
 ### Directories
 ```shell
-mkdir -p /var/lib/tftpboot
-mkdir -p /var/lib/tftpboot/{boot,grub,grub2,pxelinux.cfg}
+sudo mkdir -p /var/lib/tftpboot
+sudo mkdir -p /var/lib/tftpboot/{boot,grub,grub2,pxelinux.cfg}
 ```
 
 ### Bootloaders
 ```shell
-dnf install -y syslinux
-cp /usr/share/syslinux/{pxelinux.0,menu.c32,chain.c32,ldlinux.c32,libcom32.c32,libutil.c32} /var/lib/tftpboot
+sudo dnf install -y syslinux
+sudo cp /usr/share/syslinux/{pxelinux.0,menu.c32,chain.c32,ldlinux.c32,libcom32.c32,libutil.c32} /var/lib/tftpboot
 ```
 
 ### Permissions
 ```shell
-chown your-account:your-group -R /var/lib/tftpboot
+sudo chown your-account:your-group -R /var/lib/tftpboot
 
-semanage fcontext -a -t tftpdir_t "/var/lib/tftpboot(/.*)?"
-restorecon -R -v /var/lib/tftpboot/
+sudo semanage fcontext -a -t tftpdir_t "/var/lib/tftpboot(/.*)?"
+sudo restorecon -R -v /var/lib/tftpboot/
 ```
 
 ### Firewall
 ```shell
-firewall-cmd --add-service=tftp --permanent
-firewall-cmd --reload
+sudo firewall-cmd --add-service=tftp --permanent
+sudo firewall-cmd --reload
 ```
 
 ## DHCP
@@ -90,7 +90,7 @@ firewall-cmd --reload
 ### Installation
 
 ```shell
-dnf install dhcp-server
+sudo dnf install dhcp-server
 ```
 
 ### Configuration
@@ -101,7 +101,7 @@ See the `dhcp/dhcpd.conf` file.
 ### Service
 
 ```shell
-systemctl edit dhcpd
+sudo systemctl edit dhcpd
 ```
 
 Add the following content:
@@ -122,7 +122,7 @@ sudo systemctl enable --now dhcpd.service
 Check the status
 
 ```shell
-systemctl status dhcpd.service
+sudo systemctl status dhcpd.service
 ```
 
 ### Last steps
@@ -139,7 +139,7 @@ chown $USER:dhcpd -R /etc/dhcp
 ### Installation
 
 ```shell
-dnf install -y bind bind-utils
+sudo dnf install -y bind bind-utils
 ```
 
 ### Configuration
@@ -164,9 +164,9 @@ Edit the `/var/named/dynamic/66.168.192.in-addr.arpa.db` same as `66.168.192.in-
 ### Permissions
 
 ```shell
-chown -R named:named /var/named/dynamic
-usermod -a -G named your-account
-chmod g+rw /var/run/named/named.pid /var/run/named/session.key
+sudo chown -R named:named /var/named/dynamic
+sudo usermod -a -G named your-account
+sudo chmod g+rw /var/run/named/named.pid /var/run/named/session.key
 ```
 
 TODO: I had to logout to apply the changes to my account
@@ -174,8 +174,8 @@ TODO: I had to logout to apply the changes to my account
 ### Service
 
 ```shell
-systemctl enable --now named
-systemctl status named
+sudo ystemctl enable --now named
+sudo systemctl status named
 ```
 
 ## Smart Proxy
@@ -292,6 +292,16 @@ Leases file
 ```shell
 /var/lib/dhcpd/dhcpd.leases
 ```
+
+### Errors
+
+#### Fetching kickstart from Foreman/Smart Proxy
+
+```shell
+Warning: anaconda: failed to fetch kickstart from http://your-smart-proxy/unattende ...
+```
+
+Solution: Check your firewall and verify that `virbr66` is in `trusted` zone
 
 ## TODO
 * Add diagram for bare-metal
