@@ -11,6 +11,9 @@ Development setup.
 :redfish_verify_ssl: false
 ```
 
+## Download sample Red Fish mocks
+https://www.dmtf.org/dsp/DSP2043
+
 ## Redfish Mockup Server
 
 Installation
@@ -21,7 +24,14 @@ pip install -r requirements.txt
 
 Run the server
 ```shell
-python ./redfishMockupServer.py -H "localhost" -p 8000 -s --cert ~/path/to/cert --key ~/path/to/key
+python ./redfishMockupServer.py -H "localhost" --port 8000 --ssl --cert ~/path/to/cert --key ~/path/to/key
+
+python ./redfishMockupServer.py -H "localhost" --port 8000 \
+  --ssl \
+  --cert ~/konfig/ssl/ssl_cert.pem \
+  --key ~/konfig/ssl/ssl_key.pem \
+  --short-form \
+  --dir ~/Downloads/DSP2043_2025.2/public-compose-action
 ```
 
 ## Call Smart Proxy
