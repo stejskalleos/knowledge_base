@@ -278,7 +278,15 @@ ls pxelinux.0
 ### DNS
 
 ```shell
-TODO
+dig @localhost july-mayers.foreman-isc.lan A
+nslookup july-mayers.foreman-isc.lan localhost
+```
+
+Log files
+```
+/var/log/named/
+/var/log/messages
+/var/log/syslog
 ```
 
 ### DHCP
@@ -302,7 +310,3 @@ Warning: anaconda: failed to fetch kickstart from http://your-smart-proxy/unatte
 ```
 
 Solution: Check your firewall and verify that `virbr66` is in `trusted` zone
-
-## TODO
-* Add diagram for bare-metal
-* DNS DHCP debugging
