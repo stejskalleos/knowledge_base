@@ -36,6 +36,12 @@ python ./redfishMockupServer.py -H "localhost" --port 8000 \
 
 ## Call Smart Proxy
 ```shell
-curl -X GET "http://localhost:8080/bmc/localhost:8000/test" --user admin:changeme
+curl -X GET "http://localhost:8080/bmc/$REDFISH_SERVER:$PORT/test" --user admin:changeme
+
+curl --user admin:changeme \
+  -X PUT \
+  -H "Content-Type: application/json" \
+  -d '{}' \
+  "http://localhost:8080/bmc/$REDFISH_SERVER:$PORT/chassis/power/cycle"
 ```
 
