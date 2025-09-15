@@ -1,0 +1,3 @@
+---
+:dns_key: /etc/named/smart-proxy.key
+:dns_server: 127.0.0.1

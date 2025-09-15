@@ -1,0 +1,10 @@
+---
+:trusted_hosts:
+  - foreman.local.lan
+
+:foreman_url: https://foreman.local.lan
+:log_file: STDOUT
+:http_port: 8080
+
+:bind_host: ["*"]
+:log_level: DEBUG

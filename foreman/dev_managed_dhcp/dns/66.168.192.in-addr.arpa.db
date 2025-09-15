@@ -1,0 +1,10 @@
+$TTL 86400
+@   IN  SOA     foreman.foreman-isc.lan. root.foreman-isc.lan. (
+                    2025090801  ; Serial
+                    3600        ; Refresh
+                    1800        ; Retry
+                    604800      ; Expire
+                    86400       ; Minimum
+)
+@       IN  NS      foreman.foreman-isc.lan.
+1       IN  PTR     foreman.foreman-isc.lan.
