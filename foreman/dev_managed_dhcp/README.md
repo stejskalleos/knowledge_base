@@ -264,6 +264,25 @@ https://community.theforeman.org/t/debugging-provisioning/32952
 sudo wireshark -ki virbr66
 ```
 
+### Smart Proxy
+
+Make sure the `template_url` port in `config/templates.yml` matches the port your smart-proxy is running on.
+
+### Mac address
+
+when creating new host make sure the mac address is unique(not used in other provisioned host in same network)
+
+### Firewall
+
+Note:- Please confirm that [firewall configuration](#firewall) is correctly configured, usually it needs to be updated after each reboot / power on of your PC.
+
+### Network interface
+make sure after changing `foreman-isc.lan.xml` [network configuration](#create-the-network) restart dhcp
+
+```shell
+sudo systemctl restart dhcpd
+```
+
 ### TFTP
 
 ```shell
