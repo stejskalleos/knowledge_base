@@ -41,6 +41,11 @@ sudo virsh net-autostart foreman-isc.lan
 sudo virsh net-info foreman-isc.lan
 ```
 
+Disable dnsmasq (must be done after every virsh `net-edit`)
+```shelll
+systemctl stop dnsmasq
+```
+
 ### Firewall
 
 ```shell

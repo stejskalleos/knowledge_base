@@ -1,4 +1,4 @@
 ---
 :enabled: true
 :tftproot: /var/lib/tftpboot/
-:tftp_servername: 192.168.66.1
+:tftp_servername: 127.0.0.1
