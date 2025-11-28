@@ -334,3 +334,8 @@ Warning: anaconda: failed to fetch kickstart from http://your-smart-proxy/unatte
 ```
 
 Solution: Check your firewall and verify that `virbr66` is in `trusted` zone
+
+
+#### TFTP bootfile not found
+check the /var/lib/dhcpd/dhcpd.leases if it is correctly configured;
+systemctl restart dhcpd tftp
