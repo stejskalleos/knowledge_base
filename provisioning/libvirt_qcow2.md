@@ -23,11 +23,8 @@ virt-customize \
   --copy-in /home/$USER/isos/sshd_config:/tmp \
   --run-command 'mv /tmp/sshd_config /etc/ssh/sshd_config' \
   --run-command 'chmod 600 /etc/ssh/sshd_config' \
-  --run-command 'restorecon /etc/ssh/sshd_config
+  --run-command 'restorecon /etc/ssh/sshd_config' \
   --root-password password:changeme
-
-# This should be done via one command above
-# virt-customize -a stream10-generic-cloud.qcow2 --root-password password:changeme
 ```
 
 ## Next steps
