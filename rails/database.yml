@@ -1,0 +1,28 @@
+---
+default: &default
+  adapter: "postgresql"
+  encoding: "unicode"
+  username: "<%= ENV.fetch('POSTGRES_USER') { 'postgres' } %>"
+  password: "<%= ENV.fetch('POSTGRES_PASSWORD') { 'changeme' } %>"
+  host: "<%= ENV.fetch('POSTGRES_HOST') { '127.0.0.1' } %>"
+  port: "<%= ENV.fetch('POSTGRES_PORT') { 5432 } %>"
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: "<%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>"
+  checkout_timeout: 5
+  # libpq otherwise tries GSSAPI/Kerberos (RH.COM) before password auth.
+  # If the KDC is slow or unreachable that looks like bin/rake and bin/rails hanging
+  # right after boot, with no further log output.
+  gssencmode: disable
+  connect_timeout: 5
+
+development:
+  <<: *default
+  database: "<%= ENV.fetch('POSTGRES_DB') { 'fo' } %>_dev"
+
+test:
+  <<: *default
+  database: "<%= ENV.fetch('POSTGRES_DB') { 'fo' } %>_test"
+
+production:
+  <<: *default
+  database: "<%= ENV.fetch('POSTGRES_DB') { 'fo' } %>_prod"
