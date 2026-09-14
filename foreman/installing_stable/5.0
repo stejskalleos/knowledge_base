@@ -1,0 +1,34 @@
+#!/usr/bin/bash
+
+export LANG_ALL=en_US.utf-8 LANG=en_US.utf-8
+
+if ! [ $(id -u) = 0 ]; then
+  bye 'This script must be run as a root'
+fi
+
+echo ''
+echo 'Updating /etc/hosts'
+echo "$(hostname -I | awk '{print $1}') $(hostname -f)" > /etc/hosts
+
+firewall-cmd \
+--add-port="8000/tcp" \
+--add-port="9090/tcp"
+
+firewall-cmd \
+--add-service=dns \
+--add-service=dhcp \
+--add-service=tftp \
+--add-service=puppetmaster \
+--add-service=http \
+--add-service=https
+
+firewall-cmd --runtime-to-permanent
+
+dnf clean all
+dnf install -y https://yum.theforeman.org/releases/5.0/el9/x86_64/foreman-release.rpm
+dnf install -y https://yum.theforeman.org/katello/5.0/katello/el9/x86_64/katello-repos-latest.rpm
+dnf install -y https://yum.voxpupuli.org/openvox8-release-el-9.noarch.rpm
+
+foreman-installer --scenario katello \
+    --foreman-initial-admin-username 'admin' \
+    --foreman-initial-admin-password 'changeme'
