@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: kea
+      POSTGRES_USER: kea
+      POSTGRES_PASSWORD: kea-review-only
+    command: ["postgres", "-c", "listen_addresses=127.0.0.1", "-c", "port=15432", "-c", "timezone=UTC"]
+    network_mode: host
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 15432 -U kea -d kea"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  db-init:
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+    image: kea-admin-pr949:3.0.5
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - "if kea-admin db-version pgsql -h 127.0.0.1 -P 15432 -u kea -p kea-review-only -n kea >/dev/null 2>&1; then echo 'Kea PostgreSQL schema already initialized'; else kea-admin db-init pgsql -h 127.0.0.1 -P 15432 -u kea -p kea-review-only -n kea; fi"
+    network_mode: host
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  kea:
+    image: docker.cloudsmith.io/isc/docker/kea-dhcp4:3.0.5
+    container_name: kea-pr949-dhcp4
+    entrypoint: ["kea-dhcp4"]
+    command: ["-c", "/etc/kea/kea-dhcp4.conf"]
+    network_mode: host
+    cap_add:
+      - NET_RAW
+      - NET_BIND_SERVICE
+    volumes:
+      - ./kea-dhcp4.conf:/etc/kea/kea-dhcp4.conf:ro,Z
+      - kea-data:/var/lib/kea
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+
+volumes:
+  postgres-data:
+  kea-data:

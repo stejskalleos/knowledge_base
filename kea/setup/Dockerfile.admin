@@ -1,0 +1,9 @@
+FROM docker.cloudsmith.io/isc/docker/kea-dhcp4:3.0.5
+
+USER root
+
+RUN apk add --no-cache curl bash postgresql-client \
+    && curl -1sLf 'https://dl.cloudsmith.io/public/isc/kea-3-0/setup.alpine.sh' | bash \
+    && apk add --no-cache 'isc-kea-admin~3.0.5'
+
+ENTRYPOINT ["kea-admin"]

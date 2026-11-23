@@ -41,4 +41,7 @@ dnf install kea
 
 ## Configuration
 
+For the containerized Kea API setup used to review Smart Proxy PR #949, see
+[setup/README.md](setup/README.md).
+
 

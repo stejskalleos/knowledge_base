@@ -21,12 +21,6 @@ virt-host-validate qemu
 
 If `virt-host-validate` reports missing hardware virtualization (common on laptops, nested cloud VMs, or some CI runners), KubeVirt can still run in software emulation mode — see [Troubleshooting](#troubleshooting) below.
 
-Also make sure `kubectl` is installed (or prefix every command below with `minikube kubectl --`):
-
-```shell
-sudo dnf install -y kubernetes-client
-```
-
 ## Installation
 
 ### Cleanup
@@ -35,7 +29,7 @@ sudo dnf install -y kubernetes-client
 minikube delete --all --purge
 rm -rf ~/.minikube/cache/iso
 rm -rf ~/.minikube/machines/minikube
-dnf remove minikube -y
+dnf remove minikube kubernetes* -y
 ```
 
 ### Minikube
@@ -43,11 +37,10 @@ dnf remove minikube -y
 ```shell
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
 sudo rpm -Uvh minikube-latest.x86_64.rpm
+sudo dnf install -y kubernetes-client
 ```
 
-### First run
-
-KubeVirt needs more resources than minikube's defaults, so size the VM explicitly:
+### Start Minikube with hardware virtualization
 
 ```shell
 minikube start --driver=kvm2 --cni=flannel --memory=8192 --cpus=4 --disk-size=40g
@@ -89,6 +82,39 @@ kubectl get pods -n cdi
 
 It's normal for `cdi-uploadproxy` to briefly show `CreateContainerConfigError` (missing `cdi-api-signing-key` secret) right after apply — `cdi-apiserver` creates that secret on its own startup, and kubelet retries automatically once it exists. Re-check after a few seconds; all pods should reach `1/1 Running`.
 
+### KubeMacPool
+
+Without it, a VM's interface only gets a MAC address once it actually boots — KubeMacPool's mutating webhook assigns one synchronously when the `VirtualMachine` is created instead, from a managed, collision-free pool. It applies to every interface in the VM spec, including the default pod network, not just Multus-attached ones (see [networking.md](networking.md) for why this matters for `foreman_kubevirt`).
+
+```shell
+KMP_VERSION=$(curl -s https://api.github.com/repos/k8snetworkplumbingwg/kubemacpool/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+echo $KMP_VERSION
+
+curl -L -o kubemacpool.yaml "https://raw.githubusercontent.com/k8snetworkplumbingwg/kubemacpool/${KMP_VERSION}/config/release/kubemacpool.yaml"
+
+# Randomize the MAC OUI range so it won't collide with another KubeMacPool-managed cluster
+oui_byte1=$(openssl rand -hex 1)
+oui_byte2=$(openssl rand -hex 1)
+mac_oui="02:${oui_byte1}:${oui_byte2}"
+sed -i "s/02:00:00:00:00:00/${mac_oui}:00:00:00/" kubemacpool.yaml
+sed -i "s/02:FF:FF:FF:FF:FF/${mac_oui}:FF:FF:FF/" kubemacpool.yaml
+
+kubectl apply -f kubemacpool.yaml
+```
+
+Verify the manager pod is running:
+```shell
+kubectl get pods -n kubemacpool-system
+```
+
+The release manifest defaults to **opt-out mode** for both Pods and VirtualMachines, meaning every namespace (including `foreman`) gets MAC allocation automatically — no namespace label needed. Only label a namespace if you want to *exclude* it:
+
+```shell
+kubectl label namespace foreman mutatevirtualmachines.kubemacpool.io=ignore mutatepods.kubemacpool.io=ignore
+```
+
+Note: KubeMacPool's primary-interface allocation is documented for the `masquerade` pod-network binding; `foreman_kubevirt` currently creates the pod interface with `bridge: {}` instead (`app/models/foreman_kubevirt/kubevirt.rb`, `create_pod_network_element`). Verify the assigned MAC actually shows up (`kubectl get vm <name> -n foreman -o yaml`) after provisioning a host before relying on it.
+
 ### Sanity check: run a test VM
 
 Before wiring anything into Foreman, confirm KubeVirt can actually boot a VM:
@@ -118,7 +144,7 @@ watch kubectl get vmi testvm
 
 If this VM reaches `Running`, the cluster is ready for `foreman_kubevirt` development. Clean it up with `kubectl delete vmi testvm`.
 
-## Run
+## Start an existing cluster
 
 ```shell
 minikube start --driver=kvm2 --cni=flannel --memory=8192 --cpus=4 --disk-size=40g
